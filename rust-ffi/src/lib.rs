@@ -3,7 +3,7 @@ use std::slice;
 
 use alacritty_terminal::{Term, event::VoidListener, grid::Dimensions};
 use alacritty_terminal::term::{Config, cell::{Cell, Flags}};
-use alacritty_terminal::vte::ansi::{Color, NamedColor, Rgb, Handler};
+use alacritty_terminal::vte::ansi::{Color, NamedColor, Rgb, Processor};
 use alacritty_terminal::index::{Point, Line, Column};
 
 /// C-compatible cell structure
@@ -56,6 +56,7 @@ impl Dimensions for CTermSize {
 /// Opaque terminal handle
 pub struct CTerminal {
     term: Term<VoidListener>,
+    parser: Processor,
     size: CTermSize,
 }
 
@@ -174,8 +175,9 @@ pub extern "C" fn terminal_new(cols: c_uint, rows: c_uint) -> *mut CTerminal {
     
     let config = Config::default();
     let term = Term::new(config, &size, VoidListener);
+    let parser = Processor::new();
     
-    let terminal = Box::new(CTerminal { term, size });
+    let terminal = Box::new(CTerminal { term, parser, size });
     Box::into_raw(terminal)
 }
 
@@ -205,9 +207,7 @@ pub extern "C" fn terminal_process_bytes(
         let input_slice = slice::from_raw_parts(input, input_len);
         
         // Process the input through VTE parser
-        for &byte in input_slice {
-            terminal.term.input(byte as char);
-        }
+        terminal.parser.advance(&mut terminal.term, input_slice);
         
         // For simplicity, assume all lines might have changed
         // In a real implementation, you'd track damage more precisely
