@@ -127,9 +127,10 @@ The implementation uses a simplified FFI approach:
 
 ### Performance Characteristics
 
-- **Memory Usage**: ~29MB static library (includes all dependencies)
+- **Library Size**: 7.3MB static library (74% smaller than original)
 - **Processing Speed**: Handles typical terminal input at native speeds
 - **Startup Time**: Fast initialization, no dynamic loading overhead
+- **Memory Usage**: Efficient grid-based storage with optimized allocations
 
 ## Limitations
 
@@ -145,7 +146,7 @@ The implementation uses a simplified FFI approach:
 | ANSI Support | Limited | Complete |
 | Unicode | Basic | Full Unicode + emoji |
 | Performance | Good | Excellent |
-| Memory Usage | ~1MB | ~29MB |
+| Memory Usage | ~1MB | 7.3MB |
 | Maintenance | Minimal | Active (Alacritty project) |
 
 ## Building from Source

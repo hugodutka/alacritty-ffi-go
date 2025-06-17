@@ -8,9 +8,15 @@ name = "alacritty_ffi"
 crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
-alacritty_terminal = { git = "https://github.com/alacritty/alacritty.git", default-features = false }
-vte = "0.15.0"
+alacritty_terminal = { git = "https://github.com/alacritty/alacritty.git", default-features = false, features = [] }
 libc = "0.2"
 
 [features]
 default = []
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+opt-level = "z"  # Optimize for size
