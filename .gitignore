@@ -1,0 +1,25 @@
+# Rust build artifacts
+rust-ffi/target/
+rust-ffi/Cargo.lock
+
+# Go build artifacts
+go-bindings/*.test
+examples/example
+examples/*.exe
+
+# Built libraries (will be rebuilt)
+lib/libalacritty_ffi.a
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# IDE artifacts
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
