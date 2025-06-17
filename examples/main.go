@@ -102,5 +102,28 @@ func main() {
 	content := term.String()
 	fmt.Printf("Terminal content:\n%s\n", content)
 
+	fmt.Println("\n=== Full Terminal Content Cell by Cell ===")
+	for y := uint32(0); y < rows; y++ {
+		for x := uint32(0); x < cols; x++ {
+			cell, err := term.GetCell(x, y)
+			if err != nil {
+				log.Fatal("Failed to get cell:", err)
+			}
+			// Set foreground and background colors using ANSI escape sequences
+			var formatting string
+			if cell.Bold {
+				formatting += "\x1b[1m"
+			}
+			if cell.Underline {
+				formatting += "\x1b[4m"
+			}
+			fmt.Printf("\x1b[38;2;%d;%d;%dm\x1b[48;2;%d;%d;%dm%s%c\x1b[0m",
+				cell.FgColor.R, cell.FgColor.G, cell.FgColor.B,
+				cell.BgColor.R, cell.BgColor.G, cell.BgColor.B,
+				formatting, cell.Char)
+		}
+		fmt.Println()
+	}
+
 	fmt.Println("\n=== Test Complete ===")
 }
